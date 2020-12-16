@@ -10,7 +10,20 @@ export default class App extends Component {
         deaths: [],
         recovered: [],
         confirmed: [],
-        lastUpdate: ''
+        lastUpdate: '',
+        country: ''
+    }
+
+    handleCountryChange = async country => {
+        const data = await fetchData(country)
+
+        this.setState({
+            deaths: data.deaths,
+            recovered: data.recovered,
+            lastUpdate: data.lastUpdate,
+            confirmed: data.confirmed,
+            country
+        })
     }
     
 
@@ -27,14 +40,14 @@ export default class App extends Component {
         })
     }
     render() {
-        const {deaths, recovered, lastUpdate, confirmed } = this.state 
+        const {deaths, recovered, lastUpdate, confirmed, country } = this.state 
 
         return (
             <div  className={styles.container} >
                 
                 <Cards deaths={deaths} recovered={recovered} lastUpdate={lastUpdate} confirmed={confirmed}/>
-                <CountryPicker />
-                <Chart />
+                <CountryPicker handleChange={this.handleCountryChange}/>
+                <Chart deaths={deaths} recovered={recovered} lastUpdate={lastUpdate} confirmed={confirmed} country={country}/>
                 
             </div>
         )
